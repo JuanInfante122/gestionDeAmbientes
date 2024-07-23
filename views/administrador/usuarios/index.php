@@ -44,7 +44,7 @@
     </div>
 </header>
 <nav>
-<div class="column-toggle-buttons">
+    <div class="column-toggle-buttons">
         <button class="toggle-vis" data-column="0">ID</button>
         <button class="toggle-vis" data-column="1">Nombres</button>
         <button class="toggle-vis" data-column="2">Apellidos</button>
@@ -75,7 +75,7 @@
             <tbody>
                 <?php
                 // Consulta para obtener los datos
-                $query = "SELECT id_usuario, Nombres, Apellidos, Correo, Rol FROM t_usuarios";
+                $query = "SELECT id_usuario, Nombres, Apellidos, Correo, Rol, Estado FROM t_usuarios";
                 $result = $db->query($query);
 
                 // Mostrar los datos en la tabla
@@ -88,15 +88,9 @@
                         echo "<td>" . $row["Correo"] . "</td>";
                         echo "<td>" . $row["Rol"] . "</td>";
                         echo "<td>";
-                        if ($row['Estado'] !== 'Inhabilitado') {
-                            $url_update = '/dashboard/gestion%20de%20ambientes/admin/updateUsuario/';
-                            echo "<a href='" . $url_update . $row['Id_usuario'] . "' class='boton-modificar'><img src='../assets/editar.svg'></a>";
-                        } else {
-                            echo "<a href='#' onclick='confirmarHabilitar(" . $row['Id_usaurio'] . ")' class='boton-habilitar boton-accion'><img src='../assets/habilitar.svg'></a>";
-                        }
-                        if ($row['Estado'] !== 'Inhabilitado') {
-                            echo "<a href='#' onclick='confirmarInhabilitar(" . $row['Id_usuario'] . ")' class='boton-inhabilitar boton-accion'><img src='../assets/inhabilitar1.svg'></a>";
-                        }
+                        
+                            $url_update = '/dashboard/gestion%20de%20ambientes/usuarios/updateUsuario/' . $row['id_usuario'];
+                            echo "<a href='" . $url_update . "' class='boton-modificar'><img src='../assets/editar.svg'></a>";
                         echo "</td>";
                         echo "</tr>";
                     }
@@ -108,18 +102,18 @@
             </tbody>
         </table>
         <div class="filtro-y-crear">
-        <div class="crear-ambiente">
-            <ul>
-                <?php
-                $url_create = '/dashboard/gestion%20de%20ambientes/admin/createUsuario/';
-                ?>
-                <li><a href="<?php echo $url_create; ?>" id="btn-create">Crear Nuevo Usuario</a></li>
-            </ul>
+            <div class="crear-ambiente">
+                <ul>
+                    <?php
+                    $url_create = '/dashboard/gestion%20de%20ambientes/usuarios/createUsuario/';
+                    ?>
+                    <li><a href="<?php echo $url_create; ?>" id="btn-create">Crear Nuevo Usuario</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
         <div class="regresar">
             <?php
-            $url_regresar = 'home';
+            $url_regresar = '../admin/home';
             ?>
             <a href="<?php echo $url_regresar; ?>" class="button boton-centrado" id="btn-regresar">Regresar</a>
         </div>
@@ -138,7 +132,7 @@
         });
 
         // Configuración de los botones para mostrar/ocultar columnas
-        $('.toggle-vis').on('click', function(e) {
+        $('.toggle-vis').on('click', function(e) {  
             e.preventDefault();
 
             // Obtenemos el índice de la columna correspondiente al botón
@@ -149,17 +143,16 @@
             column.visible(!column.visible());
         });
     });
+    
     function confirmarHabilitar(id) {
-    if (confirm('¿Está seguro de que desea habilitar este usuario?')) {
-        window.location.href = '/dashboard/gestion%20de%20ambientes/admin/usuarios';
+        if (confirm('¿Está seguro de que desea habilitar este usuario?')) {
+            window.location.href = "inhabilitarUsuario/" + id;}
     }
-}
 
-function confirmarInhabilitar(id) {
-    if (confirm('¿Está seguro de que desea inhabilitar este usuario?')) {
-        window.location.href = '/dashboard/gestion%20de%20ambientes/admin/usuarios/';
+    function confirmarInhabilitar(id) {
+        if (confirm('¿Está seguro de que desea inhabilitar este usuario?')) {
+            window.location.href = "habilitarUsuario/" + id;}
     }
-}
 </script>
 
 <footer>
